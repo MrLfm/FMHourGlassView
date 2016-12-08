@@ -30,7 +30,6 @@
 - (instancetype)initWithView:(UIView *)view {
     self = [super init];
     if (self) {
-        
         // 背景
         _containerView = view;
         
@@ -44,6 +43,7 @@
     }
     return self;
 }
+#pragma mark ----------位置大小----------
 - (void)initCommon {
     
     self.frame = CGRectMake(0, 0, _containerView.bounds.size.width, _containerView.bounds.size.height);
@@ -58,20 +58,21 @@
     
     //    NSLog(@"宽：%f 高：%f",_width,_height);
 }
+#pragma mark ----------沙漏背景----------
 - (void)initContainer {
     
-    // 绘制沙漏背景
     _containerLayer = [CALayer layer];
     _containerLayer.backgroundColor = [UIColor clearColor].CGColor;
     _containerLayer.frame = CGRectMake(0, 0, _width, _height*2);
     _containerLayer.anchorPoint = CGPointMake(0.5, 0.5);
     _containerLayer.position = CGPointMake(self.frame.size.width/2, self.frame.size.height/2);
+    
     [self.layer addSublayer:_containerLayer];
 }
-#pragma mark ----------顶部倒三角----------
+#pragma mark ----------顶部倒三角▽----------
 - (void)initTop {
     
-    // 画▽
+    // 路径
     UIBezierPath *path = [UIBezierPath bezierPath];
     // 开始点
     [path moveToPoint:CGPointMake(0, 0)];
@@ -82,7 +83,7 @@
     // 关闭路径
     [path closePath];
     
-    //▽填充
+    // 填充
     _topLayer = [CAShapeLayer layer];
     // 位置 大小
     _topLayer.frame = CGRectMake(0, 0, _width, _height);
@@ -100,14 +101,14 @@
     [_containerLayer addSublayer:_topLayer];
     
     
-    // 画▽边框
+    // 边框
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
     [borderPath moveToPoint:CGPointMake(0, 0)];
     [borderPath addLineToPoint:CGPointMake(_width, 0)];
     [borderPath addLineToPoint:CGPointMake(_width/2, _height)];
     [borderPath addLineToPoint:CGPointMake(0, 0)];
     [borderPath closePath];
-    // ▽边框填充
+    // 边框填充
     CAShapeLayer *borderLayer = [CAShapeLayer layer];
     borderLayer.frame = CGRectMake(0, 0, _width, _height);
     borderLayer.path = borderPath.CGPath;
@@ -117,18 +118,17 @@
     
     [_containerLayer addSublayer:borderLayer];
 }
-#pragma mark ----------底部三角----------
+#pragma mark ----------底部三角△----------
 - (void)initBottom {
     
     UIBezierPath *path = [UIBezierPath bezierPath];
-    // 画△
     [path moveToPoint:CGPointMake(_width/2.0f, 0)];
     [path addLineToPoint:CGPointMake(_width, _height)];
     [path addLineToPoint:CGPointMake(0, _height)];
     [path addLineToPoint:CGPointMake(_width/2.0f, 0)];
     
     [path closePath];
-    // △填充
+    // 填充
     _bottomLayer = [CAShapeLayer layer];
     _bottomLayer.frame = CGRectMake(0, _height, _width, _height);
     _bottomLayer.path = path.CGPath;
@@ -140,14 +140,14 @@
     
     [_containerLayer addSublayer:_bottomLayer];
     
-    // △边框
+    // 边框
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
     [borderPath moveToPoint:CGPointMake(0, _height*2)];
     [borderPath addLineToPoint:CGPointMake(_width, _height*2)];
     [borderPath addLineToPoint:CGPointMake(_width/2, _height)];
     [borderPath addLineToPoint:CGPointMake(0, _height*2)];
     [borderPath closePath];
-    // △边框填充
+    // 边框填充
     CAShapeLayer *borderLayer = [CAShapeLayer layer];
     borderLayer.frame = CGRectMake(0, 0, _width, _height);
     borderLayer.path = borderPath.CGPath;
@@ -171,6 +171,7 @@
     // 路径开始/结束的地方占总路径的百分比
     _lineLayer.strokeStart = 0;
     _lineLayer.strokeEnd = 1;
+    
     _lineLayer.lineWidth = 1.0f;
     _lineLayer.lineJoin = kCALineJoinMiter;
     // 虚线，@1,@1是指画1个长度，空1个长度...这样循环
@@ -215,9 +216,9 @@
     _containerAnimation.keyTimes = @[@0.9f,@1.0f];
     _containerAnimation.values = @[[NSNumber numberWithFloat:0.0f],[NSNumber numberWithFloat:M_PI]];
 }
+#pragma mark ----------添加动画----------
 - (void)startAnimation {
     
-    // 添加动画
     [_topLayer addAnimation:_topAnimation forKey:@"ta"];
     [_bottomLayer addAnimation:_bottomAnimation forKey:@"ba"];
     [_lineLayer addAnimation:_lineAnimation forKey:@"la"];
