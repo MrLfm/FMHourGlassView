@@ -13,6 +13,7 @@
 		9BE070941DF8ECC900803602 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BE070921DF8ECC900803602 /* Main.storyboard */; };
 		9BE070961DF8ECC900803602 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9BE070951DF8ECC900803602 /* Assets.xcassets */; };
 		9BE070991DF8ECC900803602 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9BE070971DF8ECC900803602 /* LaunchScreen.storyboard */; };
+		9BE070A31DF8ECF900803602 /* FMHourGlassView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9BE070A21DF8ECF900803602 /* FMHourGlassView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		9BE070951DF8ECC900803602 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9BE070981DF8ECC900803602 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9BE0709A1DF8ECC900803602 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9BE070A11DF8ECF900803602 /* FMHourGlassView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FMHourGlassView.h; sourceTree = "<group>"; };
+		9BE070A21DF8ECF900803602 /* FMHourGlassView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FMHourGlassView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +61,7 @@
 		9BE070881DF8ECC900803602 /* HourGlassView */ = {
 			isa = PBXGroup;
 			children = (
+				9BE070A01DF8ECE200803602 /* FMHourGlassView */,
 				9BE0708C1DF8ECC900803602 /* AppDelegate.h */,
 				9BE0708D1DF8ECC900803602 /* AppDelegate.m */,
 				9BE0708F1DF8ECC900803602 /* ViewController.h */,
@@ -77,6 +81,15 @@
 				9BE0708A1DF8ECC900803602 /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9BE070A01DF8ECE200803602 /* FMHourGlassView */ = {
+			isa = PBXGroup;
+			children = (
+				9BE070A11DF8ECF900803602 /* FMHourGlassView.h */,
+				9BE070A21DF8ECF900803602 /* FMHourGlassView.m */,
+			);
+			path = FMHourGlassView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -152,6 +165,7 @@
 			files = (
 				9BE070911DF8ECC900803602 /* ViewController.m in Sources */,
 				9BE0708E1DF8ECC900803602 /* AppDelegate.m in Sources */,
+				9BE070A31DF8ECF900803602 /* FMHourGlassView.m in Sources */,
 				9BE0708B1DF8ECC900803602 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

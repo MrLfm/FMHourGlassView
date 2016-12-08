@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "FMHourGlassView.h"
 
 @interface ViewController ()
 
@@ -17,6 +18,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+    [self createHourGlassView];
+}
+
+- (void)createHourGlassView {
+    
+    FMHourGlassView *hourGlassView = [[FMHourGlassView alloc] initWithView:self.view];
+    [self.view addSubview:hourGlassView];
 }
 
 - (void)didReceiveMemoryWarning {
