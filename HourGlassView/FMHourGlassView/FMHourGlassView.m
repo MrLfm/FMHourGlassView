@@ -58,7 +58,7 @@
     
     //    NSLog(@"宽：%f 高：%f",_width,_height);
 }
-#pragma mark ----------沙漏背景----------
+#pragma mark ----------绘制沙漏背景----------
 - (void)initContainer {
     
     _containerLayer = [CALayer layer];
@@ -69,7 +69,7 @@
     
     [self.layer addSublayer:_containerLayer];
 }
-#pragma mark ----------顶部倒三角▽----------
+#pragma mark ----------绘制顶部倒三角▽----------
 - (void)initTop {
     
     // 路径
@@ -118,7 +118,7 @@
     
     [_containerLayer addSublayer:borderLayer];
 }
-#pragma mark ----------底部三角△----------
+#pragma mark ----------绘制底部三角△----------
 - (void)initBottom {
     
     UIBezierPath *path = [UIBezierPath bezierPath];
@@ -157,7 +157,7 @@
     [_containerLayer addSublayer:borderLayer];
     
 }
-#pragma mark ----------中间竖线----------
+#pragma mark ----------绘制中间虚线----------
 - (void)initLine {
     
     UIBezierPath *path = [UIBezierPath bezierPath];
