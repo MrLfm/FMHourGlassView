@@ -51,10 +51,10 @@
     
     // sqrtf:求平方根
     _width = sqrtf(Hour_Glass_Width * Hour_Glass_Width + Hour_Glass_Width * Hour_Glass_Width);
-    _height = sqrtf(Hour_Glass_Width * Hour_Glass_Width);
+//    _height = sqrtf(Hour_Glass_Width * Hour_Glass_Width);
     
     // 宽是高的2倍
-    //    _height = sqrtf(Hour_Glass_Width*Hour_Glass_Width - ( (_width/2.0f) * (_width/2.0f) ) );
+    _height = sqrtf(Hour_Glass_Width*Hour_Glass_Width - ( (_width/2.0f) * (_width/2.0f) ) );
     
     //    NSLog(@"宽：%f 高：%f",_width,_height);
 }
@@ -72,23 +72,22 @@
 #pragma mark ----------绘制顶部倒三角▽----------
 - (void)initTop {
     
-    // 路径
-    UIBezierPath *path = [UIBezierPath bezierPath];
-    // 开始点
-    [path moveToPoint:CGPointMake(0, 0)];
-    [path addLineToPoint:CGPointMake(_width, 0)];
-    [path addLineToPoint:CGPointMake(_width/2.0f, _height)];
-    // 结束点
-    [path addLineToPoint:CGPointMake(0, 0)];
-    // 关闭路径
-    [path closePath];
+    // 顶部圆弧
+    
+    UIBezierPath *topPath = [UIBezierPath bezierPath];
+    [topPath moveToPoint:CGPointMake(0, 0)];
+    [topPath addArcWithCenter:CGPointMake(_width/2, _height) radius:_width startAngle:M_PI*5/4.0 endAngle:M_PI*7/4.0 clockwise:YES];
+    [topPath addLineToPoint:CGPointMake(_width, 0)];
+    [topPath addLineToPoint:CGPointMake(_width/2.0f, _height)];
+    [topPath addLineToPoint:CGPointMake(0, 0)];
+    [topPath closePath];
     
     // 填充
     _topLayer = [CAShapeLayer layer];
     // 位置 大小
     _topLayer.frame = CGRectMake(0, 0, _width, _height);
     // 填充路径
-    _topLayer.path = path.CGPath;
+    _topLayer.path = topPath.CGPath;
     // 填充颜色
     _topLayer.fillColor = Default_Color.CGColor;
     // 边线粗细
@@ -104,8 +103,9 @@
     // 边框
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
     [borderPath moveToPoint:CGPointMake(0, 0)];
+    [borderPath addArcWithCenter:CGPointMake(_width/2, _height) radius:_width startAngle:M_PI*5/4.0 endAngle:M_PI*7/4.0 clockwise:YES];
     [borderPath addLineToPoint:CGPointMake(_width, 0)];
-    [borderPath addLineToPoint:CGPointMake(_width/2, _height)];
+    [borderPath addLineToPoint:CGPointMake(_width/2.0f, _height)];
     [borderPath addLineToPoint:CGPointMake(0, 0)];
     [borderPath closePath];
     // 边框填充
@@ -121,6 +121,13 @@
 #pragma mark ----------绘制底部三角△----------
 - (void)initBottom {
     
+    UIBezierPath *downPath = [UIBezierPath bezierPath];
+    [downPath addArcWithCenter:CGPointMake(_width/2.0f, 0) radius:_width startAngle:M_PI/4.0 endAngle:M_PI*3/4.0 clockwise:YES];
+    [downPath addLineToPoint:CGPointMake(_width/2.0f, 0)];
+    [downPath addLineToPoint:CGPointMake(_width, _height)];
+    
+    [downPath closePath];
+    
     UIBezierPath *path = [UIBezierPath bezierPath];
     [path moveToPoint:CGPointMake(_width/2.0f, 0)];
     [path addLineToPoint:CGPointMake(_width, _height)];
@@ -131,7 +138,7 @@
     // 填充
     _bottomLayer = [CAShapeLayer layer];
     _bottomLayer.frame = CGRectMake(0, _height, _width, _height);
-    _bottomLayer.path = path.CGPath;
+    _bottomLayer.path = downPath.CGPath;
     _bottomLayer.lineWidth = 0.0f;
     _bottomLayer.fillColor = Default_Color.CGColor;
     _bottomLayer.anchorPoint = CGPointMake(0.5f, 1.0f);
@@ -142,20 +149,20 @@
     
     // 边框
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
-    [borderPath moveToPoint:CGPointMake(0, _height*2)];
-    [borderPath addLineToPoint:CGPointMake(_width, _height*2)];
-    [borderPath addLineToPoint:CGPointMake(_width/2, _height)];
-    [borderPath addLineToPoint:CGPointMake(0, _height*2)];
+    [borderPath addArcWithCenter:CGPointMake(_width/2.0f, 0) radius:_width startAngle:M_PI/4.0 endAngle:M_PI*3/4.0 clockwise:YES];
+    [borderPath addLineToPoint:CGPointMake(_width/2.0f, 0)];
+    [borderPath addLineToPoint:CGPointMake(_width, _height)];
     [borderPath closePath];
     // 边框填充
     CAShapeLayer *borderLayer = [CAShapeLayer layer];
-    borderLayer.frame = CGRectMake(0, 0, _width, _height);
+    // 边框位置大小，上面画的路径的参照
+    borderLayer.frame = CGRectMake(0, _height, _width, _height);
     borderLayer.path = borderPath.CGPath;
     borderPath.lineWidth = 1.0f;
     borderLayer.strokeColor = Default_Color.CGColor;
     borderLayer.fillColor = [UIColor clearColor].CGColor;
-    [_containerLayer addSublayer:borderLayer];
     
+    [_containerLayer addSublayer:borderLayer];
 }
 #pragma mark ----------绘制中间虚线----------
 - (void)initLine {
