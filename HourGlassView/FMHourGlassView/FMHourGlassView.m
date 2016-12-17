@@ -7,7 +7,7 @@
 //
 
 #import "FMHourGlassView.h"
-#define Hour_Glass_Width 15.0f
+#define Hour_Glass_Width 18.0f
 #define Hour_Glass_Duration 3.0f
 #define Default_Color [UIColor grayColor]
 
@@ -51,12 +51,13 @@
     
     // sqrtf:求平方根
     _width = sqrtf(Hour_Glass_Width * Hour_Glass_Width + Hour_Glass_Width * Hour_Glass_Width);
-//    _height = sqrtf(Hour_Glass_Width * Hour_Glass_Width);
+    //    _height = sqrtf(Hour_Glass_Width * Hour_Glass_Width);
     
     // 宽是高的2倍
-    _height = sqrtf(Hour_Glass_Width*Hour_Glass_Width - ( (_width/2.0f) * (_width/2.0f) ) );
+    //    _height = sqrtf(Hour_Glass_Width*Hour_Glass_Width - ( (_width/2.0f) * (_width/2.0f) ) );
+    _height = sqrtf(_width*_width-((_width/2.0)*(_width/2.0)));
     
-    //    NSLog(@"宽：%f 高：%f",_width,_height);
+    NSLog(@"宽：%f 高：%f",_width,_height);
 }
 #pragma mark ----------绘制沙漏背景----------
 - (void)initContainer {
@@ -75,10 +76,11 @@
     // 顶部路径
     UIBezierPath *topPath = [UIBezierPath bezierPath];
     [topPath moveToPoint:CGPointMake(0, 0)];
-    [topPath addArcWithCenter:CGPointMake(_width/2, _height) radius:_width startAngle:M_PI*5/4.0 endAngle:M_PI*7/4.0 clockwise:YES];
     [topPath addLineToPoint:CGPointMake(_width, 0)];
-    [topPath addLineToPoint:CGPointMake(_width/2.0f, _height)];
-    [topPath addLineToPoint:CGPointMake(0, 0)];
+    // 画弧线
+    [topPath addArcWithCenter:CGPointMake(0, 0) radius:_width startAngle:0 endAngle:M_PI/3.0 clockwise:YES];
+    [topPath addArcWithCenter:CGPointMake(_width, 0) radius:_width startAngle:M_PI*2/3.0 endAngle:M_PI clockwise:YES];
+    [topPath moveToPoint:CGPointMake(0, 0)];
     [topPath closePath];
     
     // 顶部路径填充
@@ -91,8 +93,9 @@
     _topLayer.fillColor = Default_Color.CGColor;
     // 边线粗细
     _topLayer.lineWidth = 0.0f;
-    // 锚点，从左上角开始顺时针数，四个点的锚点是：(0,0),(1,0),(1,1),(0,1)
-    _topLayer.anchorPoint = CGPointMake(0.5f, 1.0f);// ▽的尖角
+    // 锚点，从左下角开始顺时针转，四个角的锚点位置分别是:(0,0),(0,1),(1,1),(1.0)
+    // 这里的(0.5,1)指的是顶部的中间点
+    _topLayer.anchorPoint = CGPointMake(0.5, 1);
     // 位置
     _topLayer.position = CGPointMake(_width/2, _height);
     // 添加到SuperLayer
@@ -102,10 +105,10 @@
     // 顶部边框
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
     [borderPath moveToPoint:CGPointMake(0, 0)];
-    [borderPath addArcWithCenter:CGPointMake(_width/2, _height) radius:_width startAngle:M_PI*5/4.0 endAngle:M_PI*7/4.0 clockwise:YES];
     [borderPath addLineToPoint:CGPointMake(_width, 0)];
-    [borderPath addLineToPoint:CGPointMake(_width/2.0f, _height)];
-    [borderPath addLineToPoint:CGPointMake(0, 0)];
+    // 画弧线
+    [borderPath addArcWithCenter:CGPointMake(0, 0) radius:_width startAngle:0 endAngle:M_PI/3.0 clockwise:YES];
+    [borderPath addArcWithCenter:CGPointMake(_width, 0) radius:_width startAngle:M_PI*2/3.0 endAngle:M_PI clockwise:YES];
     [borderPath closePath];
     // 顶部边框填充
     CAShapeLayer *borderLayer = [CAShapeLayer layer];
@@ -122,30 +125,33 @@
     
     // 底部路径
     UIBezierPath *downPath = [UIBezierPath bezierPath];
-    [downPath moveToPoint:CGPointMake(_width, _height)];
-    [downPath addArcWithCenter:CGPointMake(_width/2.0f, 0) radius:_width startAngle:M_PI/4.0 endAngle:M_PI*3/4.0 clockwise:YES];
-    [downPath addLineToPoint:CGPointMake(_width/2.0f, 0)];
-    [downPath addLineToPoint:CGPointMake(_width, _height)];
-
+    [downPath moveToPoint:CGPointMake(0, _height)];
+    [downPath addArcWithCenter:CGPointMake(_width, _height) radius:_width startAngle:M_PI endAngle:M_PI*4/3.0 clockwise:YES];
+    [downPath addArcWithCenter:CGPointMake(0, _height) radius:_width startAngle:M_PI*5/3 endAngle:M_PI*2 clockwise:YES];
+    [downPath addLineToPoint:CGPointMake(0, _height)];
+    
     [downPath closePath];
-
+    
     // 底部路径填充
     _bottomLayer = [CAShapeLayer layer];
     _bottomLayer.frame = CGRectMake(0, _height, _width, _height);
     _bottomLayer.path = downPath.CGPath;
     _bottomLayer.lineWidth = 0.0f;
     _bottomLayer.fillColor = Default_Color.CGColor;
-    _bottomLayer.anchorPoint = CGPointMake(0.5f, 1.0f);
-    _bottomLayer.position = CGPointMake(_width/2.0f, _height*2.0f);// △底线中间点
+    
+    _bottomLayer.anchorPoint = CGPointMake(0.5, 1);
+    _bottomLayer.position = CGPointMake(_width/2, _height*2);
     
     [_containerLayer addSublayer:_bottomLayer];
     
     
     // 底部边框
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
-    [borderPath addArcWithCenter:CGPointMake(_width/2.0f, 0) radius:_width startAngle:M_PI/4.0 endAngle:M_PI*3/4.0 clockwise:YES];
-    [borderPath addLineToPoint:CGPointMake(_width/2.0f, 0)];
-    [borderPath addLineToPoint:CGPointMake(_width, _height)];
+    [borderPath moveToPoint:CGPointMake(0, _height)];
+    [borderPath addArcWithCenter:CGPointMake(_width, _height) radius:_width startAngle:M_PI endAngle:M_PI*4/3.0 clockwise:YES];
+    [borderPath addArcWithCenter:CGPointMake(0, _height) radius:_width startAngle:M_PI*5/3 endAngle:M_PI*2 clockwise:YES];
+    [borderPath addLineToPoint:CGPointMake(0, _height)];
+    
     [borderPath closePath];
     // 底部边框填充
     CAShapeLayer *borderLayer = [CAShapeLayer layer];
@@ -225,6 +231,7 @@
     [_lineLayer addAnimation:_lineAnimation forKey:@"la"];
     [_containerLayer addAnimation:_containerAnimation forKey:@"ca"];
 }
+
 
 /*
 // Only override drawRect: if you perform custom drawing.
