@@ -51,13 +51,10 @@
     
     // sqrtf:求平方根
     _width = sqrtf(Hour_Glass_Width * Hour_Glass_Width + Hour_Glass_Width * Hour_Glass_Width);
-    //    _height = sqrtf(Hour_Glass_Width * Hour_Glass_Width);
-    
-    // 宽是高的2倍
-    //    _height = sqrtf(Hour_Glass_Width*Hour_Glass_Width - ( (_width/2.0f) * (_width/2.0f) ) );
+    // 等边三角形中线高度
     _height = sqrtf(_width*_width-((_width/2.0)*(_width/2.0)));
     
-    NSLog(@"宽：%f 高：%f",_width,_height);
+//    NSLog(@"宽：%f 高：%f",_width,_height);
 }
 #pragma mark ----------绘制沙漏背景----------
 - (void)initContainer {
@@ -104,12 +101,27 @@
     
     // 顶部边框
     UIBezierPath *borderPath = [UIBezierPath bezierPath];
+    // 开始点
     [borderPath moveToPoint:CGPointMake(0, 0)];
+    // 顶部直线
     [borderPath addLineToPoint:CGPointMake(_width, 0)];
-    // 画弧线
-    [borderPath addArcWithCenter:CGPointMake(0, 0) radius:_width startAngle:0 endAngle:M_PI/3.0 clockwise:YES];
-    [borderPath addArcWithCenter:CGPointMake(_width, 0) radius:_width startAngle:M_PI*2/3.0 endAngle:M_PI clockwise:YES];
+    // 右上弧
+    [borderPath addArcWithCenter:CGPointMake(0, 0) radius:_width startAngle:0 endAngle:M_PI/3.0-0.1 clockwise:YES];
+    // 右中弧
+    [borderPath addArcWithCenter:CGPointMake(_width, _height+0.2) radius:_width/2.4 startAngle:M_PI+0.12 endAngle:M_PI-0.12 clockwise:NO];
+    // 右下弧
+    [borderPath addArcWithCenter:CGPointMake(0, _height*2) radius:_width startAngle:M_PI*5/3+0.2 endAngle:M_PI*2 clockwise:YES];
+    // 底部直线
+    [borderPath addLineToPoint:CGPointMake(0, _height*2)];
+    // 左下弧
+    [borderPath addArcWithCenter:CGPointMake(_width, _height*2) radius:_width startAngle:M_PI endAngle:M_PI*4/3.0-0.2 clockwise:YES];
+    // 左中弧
+    [borderPath addArcWithCenter:CGPointMake(0, _height+0.2) radius:_width/2.4 startAngle:0.12 endAngle:M_PI*2-0.12 clockwise:NO];
+    // 坐上弧
+    [borderPath addArcWithCenter:CGPointMake(_width, 0) radius:_width startAngle:M_PI*2/3.0+0.1 endAngle:M_PI clockwise:YES];
+    // 关闭路径
     [borderPath closePath];
+    
     // 顶部边框填充
     CAShapeLayer *borderLayer = [CAShapeLayer layer];
     borderLayer.frame = CGRectMake(0, 0, _width, _height);
@@ -162,7 +174,7 @@
     borderLayer.strokeColor = Default_Color.CGColor;
     borderLayer.fillColor = [UIColor clearColor].CGColor;
     
-    [_containerLayer addSublayer:borderLayer];
+//    [_containerLayer addSublayer:borderLayer];
 }
 #pragma mark ----------绘制中间虚线----------
 - (void)initLine {
@@ -179,7 +191,7 @@
     _lineLayer.strokeStart = 0;
     _lineLayer.strokeEnd = 1;
     
-    _lineLayer.lineWidth = 1.0f;
+    _lineLayer.lineWidth = 1.5f;
     _lineLayer.lineJoin = kCALineJoinMiter;
     // 虚线，@1,@1是指画1个长度，空1个长度...这样循环
     _lineLayer.lineDashPattern = [NSArray arrayWithObjects:@1,@1,nil];
